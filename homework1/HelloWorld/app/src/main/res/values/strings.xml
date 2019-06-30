@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HelloWorld</string>
+    <string name="app_button_name1">中文</string>
+    <string name="app_button_name2">English</string>
+    <string name="app_button_name3">计算</string>
+    <string name="app_click_text1">你好</string>
+    <string name="app_click_text2">HelloWorld</string>
+    <string name="app_click_text3">结果</string>
+    <string name="app_image_name">add</string>
+</resources>
