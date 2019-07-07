@@ -1,9 +1,12 @@
 package com.bytedance.camera.demo;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Surface;
@@ -26,7 +29,8 @@ import static com.bytedance.camera.demo.utils.Utils.getOutputMediaFile;
 public class CustomCameraActivity extends AppCompatActivity {
 
     private static final String TAG = "debugR";
-
+    String[] permission1 = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
     private SurfaceView mSurfaceView;
     private Camera mCamera;
 
@@ -36,9 +40,19 @@ public class CustomCameraActivity extends AppCompatActivity {
 
     private int rotationDegree = 0;
 
+    private int zoomValue = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ContextCompat.checkSelfPermission(CustomCameraActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(CustomCameraActivity.this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(CustomCameraActivity.this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(permission1, 1);
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -111,7 +125,24 @@ public class CustomCameraActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_zoom).setOnClickListener(v -> {
-            //todo 调焦，需要判断手机是否支持
+            //todo 调焦，需要判断手机是否支
+//            zoomValue = mCamera.getParameters().getZoom();
+//            Log.d(TAG, "zoom value is " + mCamera.getParameters().getZoom());
+//            zoomValue = zoomValue + 10;
+//            mCamera.getParameters().setZoom(zoomValue);
+//            Log.d(TAG, "new zoom value is " + mCamera.getParameters().getZoom());
+//            Log.d(TAG, "zoom is supported " + mCamera.getParameters().isZoomSupported() + " " + mCamera.getParameters().isSmoothZoomSupported());
+//            List<Integer> ratios = mCamera.getParameters().getZoomRatios();
+//            Log.d(TAG, "[" + ratios + "]");
+//            mCamera.getParameters().setZoom(zoomValue);
+//            zoomValue++;
+            //mCamera.stopSmoothZoom();
+            Camera.Parameters params = mCamera.getParameters();
+            final int MAX = params.getMaxZoom();
+            int zoomValue = params.getZoom();
+            zoomValue += 1;
+            params.setZoom(zoomValue);
+            mCamera.setParameters(params);
         });
     }
 
